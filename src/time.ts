@@ -1,14 +1,20 @@
 import { bunja } from "bunja";
+import { createScopeFromContext } from "bunja/react";
 import { type Atom, atom } from "jotai";
+import { createContext } from "react";
 
 import { JotaiStoreScope } from "./jotai";
 import { startRafLoop } from "./misc/raf";
 
+export const NowFnContext = createContext(Date.now);
+export const NowFnScope = createScopeFromContext(NowFnContext);
+
 export const nowBunja = bunja(() => {
   const store = bunja.use(JotaiStoreScope);
+  const nowFn = bunja.use(NowFnScope);
 
-  const nowAtom = atom(Date.now());
-  bunja.effect(() => startRafLoop(() => store.set(nowAtom, Date.now())));
+  const nowAtom = atom(nowFn());
+  bunja.effect(() => startRafLoop(() => store.set(nowAtom, nowFn())));
 
   const nowEverySecondAtom = createNowEveryAtom(nowAtom, 1000);
   const nowEveryMinuteAtom = createNowEveryAtom(nowEverySecondAtom, 60000);
