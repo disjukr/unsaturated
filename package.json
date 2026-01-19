@@ -1,7 +1,7 @@
 {
   "name": "unsaturated",
   "version": "0.0.1",
-  "description": "A TypeScript library",
+  "description": "Library providing building blocks for Bunja React Jotai stack",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -22,9 +22,15 @@
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
+  "keywords": [
+    "bunja",
+    "jotai",
+    "react",
+    "typescript",
+    "library"
+  ],
+  "author": "JongChan Choi <jong@chan.moe>",
+  "license": "Zlib",
   "peerDependencies": {
     "bunja": ">=2.0.0",
     "jotai": ">=2.0.0",
