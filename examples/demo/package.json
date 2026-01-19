@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "bunja": "^2.0.0",
+    "jotai": "^2.10.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "unsaturated": "workspace:*"
