@@ -6,13 +6,33 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    "./jotai": {
-      "types": "./dist/jotai.d.ts",
-      "import": "./dist/jotai.js"
+    "./event": {
+      "types": "./dist/event.d.ts",
+      "import": "./dist/event.js"
     },
-    "./time": {
-      "types": "./dist/time.d.ts",
-      "import": "./dist/time.js"
+    "./loader": {
+      "types": "./dist/loader.d.ts",
+      "import": "./dist/loader.js"
+    },
+    "./resource": {
+      "types": "./dist/resource.d.ts",
+      "import": "./dist/resource.js"
+    },
+    "./storage": {
+      "types": "./dist/storage.d.ts",
+      "import": "./dist/storage.js"
+    },
+    "./store": {
+      "types": "./dist/store.d.ts",
+      "import": "./dist/store.js"
+    },
+    "./now": {
+      "types": "./dist/now.d.ts",
+      "import": "./dist/now.js"
+    },
+    "./wait": {
+      "types": "./dist/wait.d.ts",
+      "import": "./dist/wait.js"
     }
   },
   "scripts": {

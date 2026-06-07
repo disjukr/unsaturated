@@ -1,7 +1,7 @@
 import { useBunja } from "bunja/react";
 import { useAtomValue } from "jotai";
 import { useRef } from "react";
-import { nowBunja } from "unsaturated/time";
+import { nowBunja } from "unsaturated/now";
 
 function RenderCounter() {
   const renderCount = useRef(0);
@@ -101,16 +101,16 @@ function NowEveryMinuteDisplay() {
   );
 }
 
-function NowEveryHourDisplay() {
-  const { nowEveryHourAtom } = useBunja(nowBunja);
-  const nowEveryHour = useAtomValue(nowEveryHourAtom);
+function NowEveryUtcHourDisplay() {
+  const { nowEveryUtcHourAtom } = useBunja(nowBunja);
+  const nowEveryUtcHour = useAtomValue(nowEveryUtcHourAtom);
   const formatDateTime = (timestamp: number) =>
     new Date(timestamp).toLocaleString();
 
   return (
     <div style={{ marginTop: "20px" }}>
       <h2>
-        Every Hour
+        Every UTC Hour
         <RenderCounter />
       </h2>
       <div
@@ -120,23 +120,49 @@ function NowEveryHourDisplay() {
           borderRadius: "5px",
         }}
       >
-        <strong>nowEveryHourAtom:</strong> {nowEveryHour}ms (
-        {formatDateTime(nowEveryHour)})
+        <strong>nowEveryUtcHourAtom:</strong> {nowEveryUtcHour}ms (
+        {formatDateTime(nowEveryUtcHour)})
       </div>
     </div>
   );
 }
 
-function NowEveryDayDisplay() {
-  const { nowEveryDayAtom } = useBunja(nowBunja);
-  const nowEveryDay = useAtomValue(nowEveryDayAtom);
+function NowEveryLocalHourDisplay() {
+  const { nowEveryLocalHourAtom } = useBunja(nowBunja);
+  const nowEveryLocalHour = useAtomValue(nowEveryLocalHourAtom);
   const formatDateTime = (timestamp: number) =>
     new Date(timestamp).toLocaleString();
 
   return (
     <div style={{ marginTop: "20px" }}>
       <h2>
-        Every Day
+        Every Local Hour
+        <RenderCounter />
+      </h2>
+      <div
+        style={{
+          padding: "10px",
+          backgroundColor: "#ffe6f0",
+          borderRadius: "5px",
+        }}
+      >
+        <strong>nowEveryLocalHourAtom:</strong> {nowEveryLocalHour}ms (
+        {formatDateTime(nowEveryLocalHour)})
+      </div>
+    </div>
+  );
+}
+
+function NowEveryUtcDayDisplay() {
+  const { nowEveryUtcDayAtom } = useBunja(nowBunja);
+  const nowEveryUtcDay = useAtomValue(nowEveryUtcDayAtom);
+  const formatDateTime = (timestamp: number) =>
+    new Date(timestamp).toLocaleString();
+
+  return (
+    <div style={{ marginTop: "20px" }}>
+      <h2>
+        Every UTC Day
         <RenderCounter />
       </h2>
       <div
@@ -146,30 +172,60 @@ function NowEveryDayDisplay() {
           borderRadius: "5px",
         }}
       >
-        <strong>nowEveryDayAtom:</strong> {nowEveryDay}ms (
-        {formatDateTime(nowEveryDay)})
+        <strong>nowEveryUtcDayAtom:</strong> {nowEveryUtcDay}ms (
+        {formatDateTime(nowEveryUtcDay)})
       </div>
     </div>
   );
 }
 
-function TimeDisplay() {
+function NowEveryLocalDayDisplay() {
+  const { nowEveryLocalDayAtom } = useBunja(nowBunja);
+  const nowEveryLocalDay = useAtomValue(nowEveryLocalDayAtom);
+  const formatDateTime = (timestamp: number) =>
+    new Date(timestamp).toLocaleString();
+
+  return (
+    <div style={{ marginTop: "20px" }}>
+      <h2>
+        Every Local Day
+        <RenderCounter />
+      </h2>
+      <div
+        style={{
+          padding: "10px",
+          backgroundColor: "#e6fff2",
+          borderRadius: "5px",
+        }}
+      >
+        <strong>nowEveryLocalDayAtom:</strong> {nowEveryLocalDay}ms (
+        {formatDateTime(nowEveryLocalDay)})
+      </div>
+    </div>
+  );
+}
+
+function NowDisplay() {
   return (
     <div style={{ padding: "20px", fontFamily: "monospace" }}>
-      <h1>Time Demo (nowBunja)</h1>
+      <h1>Now Demo</h1>
 
       <NowAtomDisplay />
       <NowEverySecondDisplay />
       <NowEveryMinuteDisplay />
-      <NowEveryHourDisplay />
-      <NowEveryDayDisplay />
+      <NowEveryUtcHourDisplay />
+      <NowEveryLocalHourDisplay />
+      <NowEveryUtcDayDisplay />
+      <NowEveryLocalDayDisplay />
 
       <div style={{ marginTop: "30px", fontSize: "12px", color: "#666" }}>
         <p>• nowAtom updates on every requestAnimationFrame (smooth)</p>
         <p>• nowEverySecondAtom updates every second (1000ms)</p>
         <p>• nowEveryMinuteAtom updates every minute (60000ms)</p>
-        <p>• nowEveryHourAtom updates every hour (3600000ms)</p>
-        <p>• nowEveryDayAtom updates every day (86400000ms)</p>
+        <p>• nowEveryUtcHourAtom updates every UTC hour (3600000ms)</p>
+        <p>• nowEveryLocalHourAtom updates every local hour</p>
+        <p>• nowEveryUtcDayAtom updates every UTC day (86400000ms)</p>
+        <p>• nowEveryLocalDayAtom updates every local day</p>
         <p style={{ marginTop: "10px", fontWeight: "bold", color: "#ff6b6b" }}>
           🔴 Red badges show render count for each component
         </p>
@@ -179,7 +235,7 @@ function TimeDisplay() {
 }
 
 function App() {
-  return <TimeDisplay />;
+  return <NowDisplay />;
 }
 
 export default App;

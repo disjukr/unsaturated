@@ -3,6 +3,8 @@ import { Provider, createStore, getDefaultStore } from "jotai";
 import type { Store } from "jotai/vanilla/store";
 import { PropsWithChildren, createContext, useState } from "react";
 
+export type { Store as JotaiStore };
+
 export const JotaiStoreContext = createContext<Store>(getDefaultStore());
 export const JotaiStoreScope = createScopeFromContext(JotaiStoreContext);
 
