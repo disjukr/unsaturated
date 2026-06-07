@@ -54,7 +54,7 @@
   "peerDependencies": {
     "bunja": ">=2.0.0",
     "jotai": ">=2.0.0",
-    "react": ">=19.0.0"
+    "react": ">=18.0.0"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
