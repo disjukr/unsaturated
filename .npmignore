@@ -1,0 +1,9 @@
+/.github
+/.vscode
+/.mise.toml
+/.prettierignore
+/.prettierrc
+/examples
+/src
+/pnpm-workspace.yaml
+/tsconfig.json
