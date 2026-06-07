@@ -1,0 +1,57 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Update version in package.json
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "Updating version to $VERSION"
+
+          # Update package.json
+          VERSION="$VERSION" node -e "
+            const { readFileSync, writeFileSync } = require('node:fs');
+            const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
+            packageJson.version = process.env.VERSION;
+            writeFileSync('package.json', JSON.stringify(packageJson, null, 2) + '\n');
+          "
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build for npm
+        run: pnpm build
+
+      - name: Publish to npm
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          NPM_TAG=latest
+
+          if [[ "$VERSION" == *-* ]]; then
+            NPM_TAG=${VERSION#*-}
+            NPM_TAG=${NPM_TAG%%.*}
+          fi
+
+          npm publish --provenance --access public --tag "$NPM_TAG"
