@@ -1,7 +1,40 @@
 import { useBunja } from "bunja/react";
-import { useAtomValue } from "jotai";
-import { useRef } from "react";
-import { nowBunja } from "unsaturated/now";
+import { type Atom, type PrimitiveAtom, useAtom, useAtomValue } from "jotai";
+import { memo, useRef } from "react";
+import { nowBunja, seededZonedNowBunja } from "unsaturated/now";
+
+const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone ?? "UTC";
+const demoTimeZoneOptions = [
+  {
+    value: "UTC",
+    description: "Baseline with no time zone offset or DST transitions.",
+  },
+  {
+    value: localTimeZone,
+    description: "Your browser's local time zone.",
+  },
+  {
+    value: "Asia/Kolkata",
+    description:
+      "Uses a 30-minute offset (UTC+05:30), so local boundaries are minute-offset.",
+  },
+  {
+    value: "Australia/Melbourne",
+    description:
+      "Uses southern hemisphere DST, where transition months differ from northern zones.",
+  },
+  {
+    value: "America/New_York",
+    description:
+      "Uses DST with skipped spring-forward hours and repeated fall-back hours.",
+  },
+].filter(
+  (option, index, options) =>
+    options.findIndex((item) => item.value === option.value) === index,
+);
+
+type TimeZoneAtom = PrimitiveAtom<string>;
+type TimestampAtom = Atom<number>;
 
 function RenderCounter() {
   const renderCount = useRef(0);
@@ -205,6 +238,145 @@ function NowEveryLocalDayDisplay() {
   );
 }
 
+function NowEveryZonedDisplay() {
+  const { timeZoneAtom, nowEveryZonedHourAtom, nowEveryZonedDayAtom } =
+    useBunja(seededZonedNowBunja);
+
+  return (
+    <div style={{ marginTop: "20px" }}>
+      <h2>Zoned Now</h2>
+      <div
+        style={{
+          padding: "10px",
+          backgroundColor: "#eef7ff",
+          borderRadius: "5px",
+        }}
+      >
+        <ZonedTimeZoneDisplay timeZoneAtom={timeZoneAtom} />
+        <ZonedHourDisplay
+          nowEveryZonedHourAtom={nowEveryZonedHourAtom}
+          timeZoneAtom={timeZoneAtom}
+        />
+        <ZonedDayDisplay
+          nowEveryZonedDayAtom={nowEveryZonedDayAtom}
+          timeZoneAtom={timeZoneAtom}
+        />
+      </div>
+    </div>
+  );
+}
+
+function ZonedTimeZoneDisplay({
+  timeZoneAtom,
+}: {
+  timeZoneAtom: TimeZoneAtom;
+}) {
+  const [timeZone, setTimeZone] = useAtom(timeZoneAtom);
+
+  return (
+    <div>
+      <label>
+        <strong>timeZoneAtom:</strong>{" "}
+        <select
+          value={timeZone}
+          onChange={(event) => setTimeZone(event.target.value)}
+        >
+          {demoTimeZoneOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.value}
+            </option>
+          ))}
+        </select>
+      </label>
+      <ul style={{ margin: "8px 0 0", color: "#555", fontSize: "12px" }}>
+        {demoTimeZoneOptions.map((option) => (
+          <li key={option.value}>
+            <strong>{option.value}:</strong> {option.description}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ZonedHourDisplay({
+  nowEveryZonedHourAtom,
+  timeZoneAtom,
+}: {
+  nowEveryZonedHourAtom: TimestampAtom;
+  timeZoneAtom: TimeZoneAtom;
+}) {
+  const timeZone = useAtomValue(timeZoneAtom);
+
+  return (
+    <div style={{ marginTop: "6px" }}>
+      <strong>nowEveryZonedHourAtom:</strong>{" "}
+      <ZonedTimestampValue timestampAtom={nowEveryZonedHourAtom} />{" "}
+      <ZonedTimestampPreview
+        timestampAtom={nowEveryZonedHourAtom}
+        timeZone={timeZone}
+      />
+    </div>
+  );
+}
+
+function ZonedDayDisplay({
+  nowEveryZonedDayAtom,
+  timeZoneAtom,
+}: {
+  nowEveryZonedDayAtom: TimestampAtom;
+  timeZoneAtom: TimeZoneAtom;
+}) {
+  const timeZone = useAtomValue(timeZoneAtom);
+
+  return (
+    <div style={{ marginTop: "6px" }}>
+      <strong>nowEveryZonedDayAtom:</strong>{" "}
+      <ZonedTimestampValue timestampAtom={nowEveryZonedDayAtom} />{" "}
+      <ZonedTimestampPreview
+        timestampAtom={nowEveryZonedDayAtom}
+        timeZone={timeZone}
+      />
+    </div>
+  );
+}
+
+const ZonedTimestampValue = memo(function ZonedTimestampValue({
+  timestampAtom,
+}: {
+  timestampAtom: TimestampAtom;
+}) {
+  const timestamp = useAtomValue(timestampAtom);
+
+  return (
+    <>
+      {timestamp}ms
+      <RenderCounter />
+    </>
+  );
+});
+
+function ZonedTimestampPreview({
+  timestampAtom,
+  timeZone,
+}: {
+  timestampAtom: TimestampAtom;
+  timeZone: string;
+}) {
+  const timestamp = useAtomValue(timestampAtom);
+
+  return (
+    <>
+      (
+      {new Date(timestamp).toLocaleString(undefined, {
+        timeZone,
+        timeZoneName: "short",
+      })}
+      )
+    </>
+  );
+}
+
 function NowDisplay() {
   return (
     <div style={{ padding: "20px", fontFamily: "monospace" }}>
@@ -217,6 +389,7 @@ function NowDisplay() {
       <NowEveryLocalHourDisplay />
       <NowEveryUtcDayDisplay />
       <NowEveryLocalDayDisplay />
+      <NowEveryZonedDisplay />
 
       <div style={{ marginTop: "30px", fontSize: "12px", color: "#666" }}>
         <p>• nowAtom updates on every requestAnimationFrame (smooth)</p>
@@ -226,6 +399,7 @@ function NowDisplay() {
         <p>• nowEveryLocalHourAtom updates every local hour</p>
         <p>• nowEveryUtcDayAtom updates every UTC day (86400000ms)</p>
         <p>• nowEveryLocalDayAtom updates every local day</p>
+        <p>• zoned now updates every selected time zone hour/day</p>
         <p style={{ marginTop: "10px", fontWeight: "bold", color: "#ff6b6b" }}>
           🔴 Red badges show render count for each component
         </p>
