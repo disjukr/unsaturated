@@ -42,7 +42,7 @@
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "pnpm run build",
-    "example": "pnpm --filter demo dev",
+    "example": "pnpm --filter examples dev",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

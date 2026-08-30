@@ -1,5 +1,5 @@
 {
-  "name": "demo",
+  "name": "examples",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,13 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-router": "^1.170.32",
     "bunja": "^3.0.0",
     "jotai": "^2.10.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "unsaturated": "workspace:*"
+    "unsaturated": "workspace:*",
+    "zod": "^4.5.4"
   },
   "devDependencies": {
+    "@tanstack/router-plugin": "^1.168.35",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",

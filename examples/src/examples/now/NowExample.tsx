@@ -377,7 +377,7 @@ function ZonedTimestampPreview({
   );
 }
 
-function NowDisplay() {
+export function NowExample() {
   return (
     <div style={{ padding: "20px", fontFamily: "monospace" }}>
       <h1>Now Demo</h1>
@@ -407,9 +407,3 @@ function NowDisplay() {
     </div>
   );
 }
-
-function App() {
-  return <NowDisplay />;
-}
-
-export default App;
