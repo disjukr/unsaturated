@@ -10,6 +10,10 @@
       "types": "./dist/event.d.ts",
       "import": "./dist/event.js"
     },
+    "./form": {
+      "types": "./dist/form.d.ts",
+      "import": "./dist/form.js"
+    },
     "./loader": {
       "types": "./dist/loader.d.ts",
       "import": "./dist/loader.js"
@@ -64,5 +68,8 @@
     "prettier": "^3.4.2",
     "react": "^19.0.0",
     "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@standard-schema/spec": "^1.1.0"
   }
 }
