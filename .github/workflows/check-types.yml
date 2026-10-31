@@ -1,0 +1,27 @@
+name: Check consumer types
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  types:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - jotai: 2.20.3
+            bunja: 3.0.2
+          - jotai: 3.0.1
+            bunja: 4.0.0-alpha.1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - run: pnpm add --workspace-root --save-dev jotai@${{ matrix.jotai }} bunja@${{ matrix.bunja }} --ignore-scripts
+      - run: pnpm test:types

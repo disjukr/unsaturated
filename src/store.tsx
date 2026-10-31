@@ -1,12 +1,16 @@
+import type { Scope } from "bunja";
 import { createScopeFromContext } from "bunja/react";
 import { Provider, createStore, getDefaultStore } from "jotai";
-import type { Store } from "jotai/vanilla/store";
 import { PropsWithChildren, createContext, useState } from "react";
+
+type Store = ReturnType<typeof createStore>;
 
 export type { Store as JotaiStore };
 
-export const JotaiStoreContext = createContext<Store>(getDefaultStore());
-export const JotaiStoreScope = createScopeFromContext(JotaiStoreContext);
+export const JotaiStoreContext: React.Context<Store> =
+  createContext<Store>(getDefaultStore());
+export const JotaiStoreScope: Scope<Store> =
+  createScopeFromContext(JotaiStoreContext);
 
 export function JotaiProvider({ children }: PropsWithChildren) {
   const [store] = useState(createStore);
