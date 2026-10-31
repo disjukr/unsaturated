@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": "..",
+    "skipLibCheck": false,
+    "lib": ["ES2021", "DOM", "DOM.Iterable"]
+  },
+  "include": ["./store-types.ts"],
+  "exclude": []
+}

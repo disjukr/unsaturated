@@ -7,7 +7,6 @@ import {
   useAtomValue,
   useSetAtom,
 } from "jotai";
-import type { Store } from "jotai/vanilla/store";
 import type {
   ChangeEvent,
   FocusEventHandler,
@@ -16,6 +15,8 @@ import type {
   ReactElement,
   ReactNode,
 } from "react";
+
+import type { JotaiStore as Store } from "./store";
 
 export type FormSchema = StandardSchemaV1;
 export type SchemaInput<TSchema extends FormSchema> =
